@@ -1,68 +1,71 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { auth } from '../../FireBase/FireBase';
+import { auth, firebaseConfig } from '../../FireBase/FireBase'; // Ensure firebaseConfig is exported from your Firebase config file
 import { signInWithCredential, PhoneAuthProvider, signInWithPhoneNumber } from 'firebase/auth';
+import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
 
 const { width, height } = Dimensions.get('window');
 
 function PhoneVerification({ route }) {
-  const { phone } = route.params; // Phone number from previous screen
+  const { phone } = route.params; // Phone number from the previous screen
   const [verificationId, setVerificationId] = useState(null);
   const [verificationCode, setVerificationCode] = useState('');
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
+  
+  // Create a ref for the reCAPTCHA verifier
+  const recaptchaVerifier = useRef(null);
 
-  // Send OTP when the screen loads
+  // Send OTP when the component mounts
   useEffect(() => {
     sendOtp();
   }, []);
 
-  // Function to send OTP
   const sendOtp = async () => {
     setLoading(true);
     try {
-      const confirmation = await signInWithPhoneNumber(auth, phone);
-      
+      // Pass the reCAPTCHA verifier as the third argument to signInWithPhoneNumber
+      const confirmation = await signInWithPhoneNumber(auth, phone, recaptchaVerifier.current);
       if (!confirmation || !confirmation.verificationId) {
         throw new Error('Failed to get verification ID');
       }
-
       setVerificationId(confirmation.verificationId);
       Alert.alert('OTP Sent', `A verification code has been sent to ${phone}`);
     } catch (error) {
-      console.error("OTP Error:", error);
+      console.error('OTP Error:', error);
       Alert.alert('Error', 'Failed to send OTP. Please try again.');
     }
     setLoading(false);
   };
 
-  // Function to verify OTP
   const handleVerify = async () => {
     if (!verificationId) {
       Alert.alert('Error', 'Verification ID is missing. Please request OTP again.');
       return;
     }
-
     if (verificationCode.trim() === '') {
       Alert.alert('Error', 'Please enter the verification code.');
       return;
     }
-
     try {
       const credential = PhoneAuthProvider.credential(verificationId, verificationCode);
       await signInWithCredential(auth, credential);
-
       Alert.alert('Success', 'Phone number verified successfully!');
-      navigation.navigate('Home'); // Navigate to Home screen
+      navigation.navigate('Home'); // Navigate to the Home screen (or your next screen)
     } catch (error) {
-      console.error("Verification Error:", error);
+      console.error('Verification Error:', error);
       Alert.alert('Error', 'Invalid OTP. Please try again.');
     }
   };
 
   return (
     <View style={styles.container}>
+      {/* Render the reCAPTCHA modal */}
+      <FirebaseRecaptchaVerifierModal
+        ref={recaptchaVerifier}
+        firebaseConfig={firebaseConfig}
+      />
       <Text style={styles.text}>Enter Verification Code</Text>
       <Text style={styles.subText}>We have sent a code to {phone}</Text>
 

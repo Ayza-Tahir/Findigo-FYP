@@ -7,6 +7,9 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -20,7 +23,7 @@ function CustomerSignUp({ navigation }) {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
- 
+  // Enable sign up button only if all fields are valid
   const isSignUpEnabled =
     name.trim() !== '' &&
     phone.trim() !== '' &&
@@ -28,149 +31,141 @@ function CustomerSignUp({ navigation }) {
     confirmPassword !== '' &&
     password === confirmPassword;
 
-    
-const handlePhoneChange = (text) => {
- 
-  let cleanText = text.replace(/[^0-9]/g, ''); 
-
-  
-  if (cleanText.length <= 13) {
-    if (cleanText.startsWith("92")) {
-      cleanText = cleanText.slice(2); 
+  // Remove non-numeric characters and build a proper Pakistani phone number
+  const handlePhoneChange = (text) => {
+    let cleanText = text.replace(/[^0-9]/g, '');
+    if (cleanText.length <= 13) {
+      if (cleanText.startsWith('92')) {
+        cleanText = cleanText.slice(2);
+      }
+      setPhone('+92' + cleanText);
     }
-    setPhone('+92' + cleanText);
-  }
-};
+  };
 
+  const handleSignUp = () => {
+    if (name.trim() === '' || phone.trim() === '' || password === '' || confirmPassword === '') {
+      Alert.alert('Error', 'Please fill all fields.');
+      return;
+    }
 
-  
-const handleSignUp = () => {
-  if (name.trim() === '' || phone.trim() === '' || password === '' || confirmPassword === '') {
-    Alert.alert('Error', 'Please fill all fields.');
-    return;
-  }
+    // Validate phone number format: +923XXXXXXXXX
+    if (!/^\+92(3\d{9})$/.test(phone)) {
+      Alert.alert('Error', 'Enter a valid Pakistani phone number (+923xxxxxxxxx).');
+      return;
+    }
 
-if (!/^\+92(3\d{9})$/.test(phone)) {
-  Alert.alert('Error', 'Enter a valid Pakistani phone number (+923xxxxxxxxx).');
-  return;
-}
+    // Validate password (minimum 6 characters with at least one number and special character)
+    if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(password)) {
+      Alert.alert(
+        'Error',
+        'Password must be at least 6 characters long and include a number and a special character.'
+      );
+      return;
+    }
 
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match.');
+      return;
+    }
 
-if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(password)) {
-  Alert.alert('Error', 'Password must be at least 6 characters long and include a number and a special character.');
-  return;
-}
-
-  if (password !== confirmPassword) {
-    Alert.alert('Error', 'Passwords do not match.');
-    return;
-  }
-
-  // Alert.alert('Success', 'Account created successfully!');
-  
-
-  // setName('');
-  // setPhone('+92');
-  // setPassword('');
-  // setConfirmPassword('');
-
+    // Navigate to PhoneVerification screen passing the phone number
     navigation.navigate('PhoneVerification', { phone });
-};
-
+  };
 
   return (
-    <View style={styles.container}>
-   
-      <View style={styles.textContainer}>
-        <Text style={styles.text}>Create Account</Text>
-        <Text style={styles.text1}>Connect to trusted services</Text>
-      </View>
-
-     
-      <View style={styles.container1}>
-        <View style={styles.inputContainer}>
-        
-          <TextInput
-            style={styles.input}
-            placeholder="Full Name"
-            placeholderTextColor="#888"
-            value={name}
-            onChangeText={setName}
-          />
-
-     
-          <TextInput
-            style={styles.input}
-            placeholder="Phone No.(+923xxxxxxxxx)"
-            placeholderTextColor="#888"
-            keyboardType="phone-pad"
-            maxLength={13}
-            value={phone}
-            onChangeText={handlePhoneChange}
-          />
-
-         
-          <View style={styles.passwordContainer}>
-            <TextInput
-              style={styles.passwordInput}
-              placeholder="Password"
-              placeholderTextColor="#888"
-              secureTextEntry={!passwordVisible}
-              value={password}
-              onChangeText={setPassword}
-            />
-            <TouchableOpacity
-              style={styles.eyeIcon}
-              onPress={() => setPasswordVisible(!passwordVisible)}
-            >
-              <Ionicons
-                name={passwordVisible ? 'eye' : 'eye-off'}
-                size={width * 0.06}
-                color="#888"
-              />
-            </TouchableOpacity>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.container}>
+          <View style={styles.textContainer}>
+            <Text style={styles.text}>Create Account</Text>
+            <Text style={styles.text1}>Connect to trusted services</Text>
           </View>
 
-         
-          <View style={styles.passwordContainer}>
-            <TextInput
-              style={styles.passwordInput}
-              placeholder="Confirm Password"
-              placeholderTextColor="#888"
-              secureTextEntry={!confirmPasswordVisible}
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-            />
-            <TouchableOpacity
-              style={styles.eyeIcon}
-              onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
-            >
-              <Ionicons
-                name={confirmPasswordVisible ? 'eye' : 'eye-off'}
-                size={width * 0.06}
-                color="#888"
+          <View style={styles.container1}>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Full Name"
+                placeholderTextColor="#888"
+                value={name}
+                onChangeText={setName}
               />
+
+              <TextInput
+                style={styles.input}
+                placeholder="Phone No.(+923xxxxxxxxx)"
+                placeholderTextColor="#888"
+                keyboardType="phone-pad"
+                maxLength={13}
+                value={phone}
+                onChangeText={handlePhoneChange}
+              />
+
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  style={styles.passwordInput}
+                  placeholder="Password"
+                  placeholderTextColor="#888"
+                  secureTextEntry={!passwordVisible}
+                  value={password}
+                  onChangeText={setPassword}
+                />
+                <TouchableOpacity
+                  style={styles.eyeIcon}
+                  onPress={() => setPasswordVisible(!passwordVisible)}
+                >
+                  <Ionicons
+                    name={passwordVisible ? 'eye' : 'eye-off'}
+                    size={width * 0.06}
+                    color="#888"
+                  />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  style={styles.passwordInput}
+                  placeholder="Confirm Password"
+                  placeholderTextColor="#888"
+                  secureTextEntry={!confirmPasswordVisible}
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                />
+                <TouchableOpacity
+                  style={styles.eyeIcon}
+                  onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
+                >
+                  <Ionicons
+                    name={confirmPasswordVisible ? 'eye' : 'eye-off'}
+                    size={width * 0.06}
+                    color="#888"
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <TouchableOpacity
+              style={[styles.button, { opacity: isSignUpEnabled ? 1 : 0.5 }]}
+              onPress={handleSignUp}
+            >
+              <Text style={styles.buttonText}>Sign Up</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => navigation.navigate('CustomerLogin')}>
+              <Text style={styles.loginText}>
+                Already have an account? <Text style={styles.loginHighlight}>Login</Text>
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
-
-  
-        <TouchableOpacity
-          style={[styles.button, { opacity: isSignUpEnabled ? 1 : 0.5 }]}
-        
-          onPress={handleSignUp}
-        >
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableOpacity>
-
-      
-        <TouchableOpacity onPress={() => navigation.navigate('CustomerLogin')}>
-          <Text style={styles.loginText}>
-            Already have an account? <Text style={styles.loginHighlight}>Login</Text>
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
