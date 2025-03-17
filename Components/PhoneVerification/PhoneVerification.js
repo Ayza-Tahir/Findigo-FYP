@@ -1,23 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { auth, firebaseConfig } from '../../FireBase/FireBase'; // Ensure firebaseConfig is exported from your Firebase config file
+import { auth, firebaseConfig } from '../../FireBase/FireBase'; 
 import { signInWithCredential, PhoneAuthProvider, signInWithPhoneNumber } from 'firebase/auth';
 import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
 
 const { width, height } = Dimensions.get('window');
 
 function PhoneVerification({ route }) {
-  const { phone } = route.params; // Phone number from the previous screen
+  const { phone } = route.params; 
   const [verificationId, setVerificationId] = useState(null);
   const [verificationCode, setVerificationCode] = useState('');
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
   
-  // Create a ref for the reCAPTCHA verifier
   const recaptchaVerifier = useRef(null);
 
-  // Send OTP when the component mounts
+  
   useEffect(() => {
     sendOtp();
   }, []);
@@ -25,7 +24,7 @@ function PhoneVerification({ route }) {
   const sendOtp = async () => {
     setLoading(true);
     try {
-      // Pass the reCAPTCHA verifier as the third argument to signInWithPhoneNumber
+     
       const confirmation = await signInWithPhoneNumber(auth, phone, recaptchaVerifier.current);
       if (!confirmation || !confirmation.verificationId) {
         throw new Error('Failed to get verification ID');
@@ -52,7 +51,7 @@ function PhoneVerification({ route }) {
       const credential = PhoneAuthProvider.credential(verificationId, verificationCode);
       await signInWithCredential(auth, credential);
       Alert.alert('Success', 'Phone number verified successfully!');
-      navigation.navigate('Home'); // Navigate to the Home screen (or your next screen)
+      navigation.navigate('Homes'); 
     } catch (error) {
       console.error('Verification Error:', error);
       Alert.alert('Error', 'Invalid OTP. Please try again.');
@@ -61,7 +60,7 @@ function PhoneVerification({ route }) {
 
   return (
     <View style={styles.container}>
-      {/* Render the reCAPTCHA modal */}
+     
       <FirebaseRecaptchaVerifierModal
         ref={recaptchaVerifier}
         firebaseConfig={firebaseConfig}

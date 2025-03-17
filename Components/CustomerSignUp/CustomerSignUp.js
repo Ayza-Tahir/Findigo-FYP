@@ -23,7 +23,7 @@ function CustomerSignUp({ navigation }) {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
-  // Enable sign up button only if all fields are valid
+  
   const isSignUpEnabled =
     name.trim() !== '' &&
     phone.trim() !== '' &&
@@ -31,7 +31,7 @@ function CustomerSignUp({ navigation }) {
     confirmPassword !== '' &&
     password === confirmPassword;
 
-  // Remove non-numeric characters and build a proper Pakistani phone number
+  
   const handlePhoneChange = (text) => {
     let cleanText = text.replace(/[^0-9]/g, '');
     if (cleanText.length <= 13) {
@@ -48,13 +48,13 @@ function CustomerSignUp({ navigation }) {
       return;
     }
 
-    // Validate phone number format: +923XXXXXXXXX
+   
     if (!/^\+92(3\d{9})$/.test(phone)) {
       Alert.alert('Error', 'Enter a valid Pakistani phone number (+923xxxxxxxxx).');
       return;
     }
 
-    // Validate password (minimum 6 characters with at least one number and special character)
+
     if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(password)) {
       Alert.alert(
         'Error',
@@ -68,7 +68,7 @@ function CustomerSignUp({ navigation }) {
       return;
     }
 
-    // Navigate to PhoneVerification screen passing the phone number
+   
     navigation.navigate('PhoneVerification', { phone });
   };
 
