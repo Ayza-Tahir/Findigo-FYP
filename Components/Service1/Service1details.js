@@ -35,7 +35,6 @@ function Service1details({ route, navigation }) {
     '5km': [
       { name: 'Harry\'s Garage', work: 'Car Repair', distance: '1.05km', review: '2.0' },
        
-      // { name: 'Freddie\'s Fix', work: 'Car Repair', distance: '2km', review: '3.0' },
     ],
     '10km': [
       { name: 'Freddie\'s Fix', work: 'Car Repair', distance: '7km', review: '3.0' },

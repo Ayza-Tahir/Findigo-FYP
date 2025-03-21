@@ -48,7 +48,7 @@ function Servicess ({ navigation }) {
           <TouchableOpacity
             key={service.id}
             style={styles.serviceBox}
-            onPress={() => navigation.navigate(service.navigateTo)} // Navigate to specific page
+            onPress={() => navigation.navigate(service.navigateTo)}
           >
             <Image source={service.icon} style={styles.serviceImage} />
             <Text style={styles.serviceText}>{service.name}</Text>
