@@ -9,6 +9,7 @@ import {
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native'; // Import the hook
 
 const { width, height } = Dimensions.get('window');
 
@@ -18,6 +19,7 @@ export default function CustomerLogin() {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigation = useNavigation(); 
 
   const isPhoneValid = (input) => {
     return input.length === 10 && /^[3][0-9]{9}$/.test(input);
@@ -25,39 +27,34 @@ export default function CustomerLogin() {
 
 const handleLogin = () => {
   const fullPhone = '+92' + phone;
-
-
+  
   if (!phone || !password) {
     Alert.alert('Missing Fields', 'Please fill in all fields.');
     return;
   }
 
- 
   if (!isPhoneValid(phone)) {
     Alert.alert('Invalid Number', 'Please enter a valid phone number: 3XXXXXXXXX');
     return;
   }
 
-  
   setError('');
   console.log('Logging in with:', fullPhone, password);
- 
+
+navigation.navigate('Homes'); 
 };
 
 
-  const handlePasswordReset = () => {
-    const fullPhone = '+92' + phone;
+const handlePasswordReset = () => {
+  const fullPhone = '+92' + phone;
 
-    if (!isPhoneValid(phone)) {
-      Alert.alert('Invalid Number', 'Please enter a valid phone number: 3XXXXXXXXX');
-      return;
-    }
+  if (!isPhoneValid(phone)) {
+    Alert.alert('Invalid Number', 'Please enter a valid phone number: 3XXXXXXXXX');
+    return;
+  }
+  navigation.navigate('PhoneauthenForgetPassword', { fullPhone });
+};
 
-    console.log('Sending reset link to:', fullPhone);
-    Alert.alert('Reset Sent', `A password reset link has been sent to ${fullPhone}`);
-    setShowForgotPassword(false);
-    setPhone('');
-  };
 
   return (
     <View style={styles.container}>
@@ -73,7 +70,7 @@ const handleLogin = () => {
           {showForgotPassword ? (
             <>
               <Text style={styles.instructions}>
-                Enter your phone number and we'll send you a reset link.
+                Enter your phone number and we'll send you a OTP to your number
               </Text>
 
               <View style={styles.phoneInputContainer}>
@@ -90,7 +87,7 @@ const handleLogin = () => {
               </View>
 
               <TouchableOpacity style={styles.resetButton} onPress={handlePasswordReset}>
-                <Text style={styles.resetButtonText}>Send Reset Link</Text>
+                <Text style={styles.resetButtonText}>Send OTP</Text>
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => setShowForgotPassword(false)}>
@@ -230,14 +227,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  forgotPassword: {
-    position: 'absolute',
-    right: 10,
-    bottom: -height * 0.03,
-    color: '#007BFF',
-    fontSize: width * 0.04,
-    fontWeight: '600',
-  },
+forgotPassword: {
+  position: 'absolute',
+  top: height * 0.02,  
+  left: width * 0.05,  
+  color: '#007BFF',
+  fontSize: width * 0.04,
+  fontWeight: '600',
+},
+
+
   instructions: {
     fontSize: width * 0.045,
     textAlign: 'center',
@@ -251,7 +250,7 @@ const styles = StyleSheet.create({
     borderRadius: width * 0.03,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: height * 0.04,
+    marginTop: height * 0.07,
   },
   resetButtonText: {
     fontSize: width * 0.045,

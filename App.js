@@ -34,6 +34,8 @@ import Service6details from './Components/Service6/Service6details';
 import Service7details from './Components/Service7/Service7details';
 import ViewProfile from './Components/ViewProfile/ViewProfile';
 import PhoneVerification from './Components/PhoneVerification/PhoneVerification';
+import PhoneauthenForgetPassword from './Components/PhoneauthenForgetPassword/PhoneauthenForgetPassword';
+import ForgetPassword from './Components/ForgetPassword/ForgetPassword';
 
 
 const Stack = createStackNavigator();
@@ -68,6 +70,16 @@ function App() {
             component={CustomerLogin}
             options={{ headerShown: false }}
           />
+           <Stack.Screen 
+           name="PhoneauthenForgetPassword"
+           component={PhoneauthenForgetPassword} 
+            options={{ headerShown: false }}
+            />
+            <Stack.Screen 
+           name="ForgetPassword"
+           component={ForgetPassword} 
+            options={{ headerShown: false }}
+            />
           <Stack.Screen
             name="CustomerSignUp"
             component={CustomerSignUp}
