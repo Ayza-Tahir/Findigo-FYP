@@ -1,16 +1,66 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 const { width, height } = Dimensions.get('window');
 
 export default function CustomerLogin() {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [showForgotPassword, setShowForgotPassword] = useState(false); 
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const isPhoneValid = (input) => {
+    return input.length === 10 && /^[3][0-9]{9}$/.test(input);
+  };
+
+const handleLogin = () => {
+  const fullPhone = '+92' + phone;
+
+
+  if (!phone || !password) {
+    Alert.alert('Missing Fields', 'Please fill in all fields.');
+    return;
+  }
+
+ 
+  if (!isPhoneValid(phone)) {
+    Alert.alert('Invalid Number', 'Please enter a valid phone number: 3XXXXXXXXX');
+    return;
+  }
+
+  
+  setError('');
+  console.log('Logging in with:', fullPhone, password);
+ 
+};
+
+
+  const handlePasswordReset = () => {
+    const fullPhone = '+92' + phone;
+
+    if (!isPhoneValid(phone)) {
+      Alert.alert('Invalid Number', 'Please enter a valid phone number: 3XXXXXXXXX');
+      return;
+    }
+
+    console.log('Sending reset link to:', fullPhone);
+    Alert.alert('Reset Sent', `A password reset link has been sent to ${fullPhone}`);
+    setShowForgotPassword(false);
+    setPhone('');
+  };
 
   return (
     <View style={styles.container}>
-    
       <View style={styles.textContainer}>
         <Text style={styles.text}>Welcome</Text>
         <Text style={styles.text1}>
@@ -18,47 +68,58 @@ export default function CustomerLogin() {
         </Text>
       </View>
 
-     
       <View style={styles.container1}>
         <View style={styles.inputContainer}>
           {showForgotPassword ? (
-           
             <>
               <Text style={styles.instructions}>
-                Enter your email, and we'll send you a reset link.
+                Enter your phone number and we'll send you a reset link.
               </Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Email Address"
-                placeholderTextColor="#888"
-                keyboardType="email-address"
-              />
-              <TouchableOpacity style={styles.resetButton}>
+
+              <View style={styles.phoneInputContainer}>
+                <Text style={styles.prefix}>+92</Text>
+                <TextInput
+                  style={styles.phoneInput}
+                  placeholder="3XXXXXXXXX"
+                  placeholderTextColor="#888"
+                  keyboardType="number-pad"
+                  maxLength={10}
+                  value={phone}
+                  onChangeText={(text) => setPhone(text.replace(/[^0-9]/g, ''))}
+                />
+              </View>
+
+              <TouchableOpacity style={styles.resetButton} onPress={handlePasswordReset}>
                 <Text style={styles.resetButtonText}>Send Reset Link</Text>
               </TouchableOpacity>
 
-            
               <TouchableOpacity onPress={() => setShowForgotPassword(false)}>
                 <Text style={styles.backToLogin}>← Back to Login</Text>
               </TouchableOpacity>
             </>
           ) : (
-            
             <>
-              <TextInput
-                style={styles.input}
-                placeholder="Email Address"
-                placeholderTextColor="#888"
-                keyboardType="email-address"
-              />
+              <View style={styles.phoneInputContainer}>
+                <Text style={styles.prefix}>+92</Text>
+                <TextInput
+                  style={styles.phoneInput}
+                  placeholder="3XXXXXXXXX"
+                  placeholderTextColor="#888"
+                  keyboardType="number-pad"
+                  maxLength={10}
+                  value={phone}
+                  onChangeText={(text) => setPhone(text.replace(/[^0-9]/g, ''))}
+                />
+              </View>
 
-             
               <View style={styles.passwordContainer}>
                 <TextInput
                   style={styles.passwordInput}
                   placeholder="Password"
                   placeholderTextColor="#888"
                   secureTextEntry={!passwordVisible}
+                  value={password}
+                  onChangeText={setPassword}
                 />
                 <TouchableOpacity
                   style={styles.eyeIcon}
@@ -72,10 +133,15 @@ export default function CustomerLogin() {
                 </TouchableOpacity>
               </View>
 
-             
               <TouchableOpacity onPress={() => setShowForgotPassword(true)}>
                 <Text style={styles.forgotPassword}>Forgot Password?</Text>
               </TouchableOpacity>
+
+              <TouchableOpacity style={styles.resetButton} onPress={handleLogin}>
+                <Text style={styles.resetButtonText}>Login</Text>
+              </TouchableOpacity>
+
+              {error !== '' && <Text style={styles.errorText}>{error}</Text>}
             </>
           )}
         </View>
@@ -83,7 +149,6 @@ export default function CustomerLogin() {
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -186,7 +251,7 @@ const styles = StyleSheet.create({
     borderRadius: width * 0.03,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: height * 0.02,
+    marginTop: height * 0.04,
   },
   resetButtonText: {
     fontSize: width * 0.045,
@@ -198,5 +263,36 @@ const styles = StyleSheet.create({
     color: '#007BFF',
     fontSize: width * 0.04,
     fontWeight: '600',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: width * 0.035,
+    marginTop: height * 0.015,
+    textAlign: 'center',
+  },
+  phoneInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    height: height * 0.062,
+    backgroundColor: '#FFF',
+    borderRadius: width * 0.03,
+    paddingHorizontal: width * 0.04,
+    marginBottom: height * 0.02,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: height * 0.002 },
+    shadowOpacity: 0.1,
+    shadowRadius: width * 0.015,
+    elevation: 2,
+  },
+  prefix: {
+    fontSize: width * 0.045,
+    color: '#333',
+    marginRight: width * 0.02,
+  },
+  phoneInput: {
+    flex: 1,
+    fontSize: width * 0.045,
+    color: '#333',
   },
 });
