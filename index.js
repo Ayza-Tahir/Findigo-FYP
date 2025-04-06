@@ -1,3 +1,5 @@
+// Only import react-native-gesture-handler on native platforms
+import 'react-native-gesture-handler';
 import 'setimmediate';
 import { registerRootComponent } from 'expo';
 

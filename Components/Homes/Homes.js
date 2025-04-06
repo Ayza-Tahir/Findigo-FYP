@@ -30,7 +30,6 @@ function Homes() {
     Montserrat: require('../../assets/Montserrat-Regular.ttf'),
     Inter: require('../../assets/Inter-Regular.ttf'),
   });
-
   const [location, setLocation] = useState(null);
   const [permissionGranted, setPermissionGranted] = useState(false); 
   const [query, setQuery] = useState('');
@@ -112,8 +111,9 @@ function Homes() {
 
   useEffect(() => {
     requestLocationPermission();
-  }, []);
 
+  }, []);
+ 
   useEffect(() => {
     const interval = setInterval(() => {
       currentIndex.current = (currentIndex.current + 1) % sliderData.length; 
@@ -253,7 +253,7 @@ function Homes() {
   return (
     <View style={styles.containerAS}>
       <View style={styles.containerHome}>
-        <Image source={Logo} style={styles.imageAS} />
+        <Image source={Logo} style={styles.imageAS} />    
   <TextInput
         style={styles.searchBar}
         placeholder="Search"

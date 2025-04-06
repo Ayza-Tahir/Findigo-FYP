@@ -1,8 +1,5 @@
-// 
 import 'setimmediate';
-import React, { Components } from 'react';
-
-Components
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import FindigoStart from './Components/FindigoStart/FindigoStart';
@@ -38,172 +35,175 @@ import PhoneauthenForgetPassword from './Components/PhoneauthenForgetPassword/Ph
 import ForgetPassword from './Components/ForgetPassword/ForgetPassword';
 
 
+
+// import Complaints from './Components/Complaints/Complaints';
+// import Feedback from './Components/Feedback/Feedback';
+
+
 const Stack = createStackNavigator();
 
 function App() {
   return (
-  
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="FindigoStart">
-          <Stack.Screen
-            name="FindigoStart"
-            component={FindigoStart}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="ChooseRole"
-            component={ChooseRole}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="CustomerSide"
-            component={CustomerSide}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="BuisnessSide"
-            component={BuisnessSide}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="CustomerLogin"
-            component={CustomerLogin}
-            options={{ headerShown: false }}
-          />
-           <Stack.Screen 
-           name="PhoneauthenForgetPassword"
-           component={PhoneauthenForgetPassword} 
-            options={{ headerShown: false }}
-            />
-            <Stack.Screen 
-           name="ForgetPassword"
-           component={ForgetPassword} 
-            options={{ headerShown: false }}
-            />
-          <Stack.Screen
-            name="CustomerSignUp"
-            component={CustomerSignUp}
-            options={{ headerShown: false }}
-          />
-           <Stack.Screen 
-           name="PhoneVerification"
-           component={PhoneVerification} 
-            options={{ headerShown: false }}
-            />
-          <Stack.Screen
-            name="BusinessLogin"
-            component={BusinessLogin}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="BusinessSignUp"
-            component={BusinessSignUp}
-            options={{ headerShown: false }}
-          />
-            <Stack.Screen
-            name="Homes"
-            component={Homes}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Servicess"
-            component={Servicess}
-            options={{ headerShown: false }}
-          />
-        
-          <Stack.Screen
-            name="Likes"
-            component={Likes}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Locationss"
-            component={Locationss}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Discountss"
-            component={Discountss}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Service1"
-            component={Service1}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Service2"
-            component={Service2}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Service3"
-            component={Service3}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Service4"
-            component={Service4}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Service5"
-            component={Service5}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Service6"
-            component={Service6}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Service7"
-            component={Service7}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Service1details"
-            component={Service1details}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Service2details"
-            component={Service2details}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Service3details"
-            component={Service3details}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Service4details"
-            component={Service4details}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Service5details"
-            component={Service5details}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Service6details"
-            component={Service6details}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Service7details"
-            component={Service7details}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="ViewProfile"
-            component={ViewProfile}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-   
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="FindigoStart">
+        <Stack.Screen
+          name="FindigoStart"
+          component={FindigoStart}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ChooseRole"
+          component={ChooseRole}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="CustomerSide"
+          component={CustomerSide}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="BuisnessSide"
+          component={BuisnessSide}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="CustomerLogin"
+          component={CustomerLogin}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PhoneauthenForgetPassword"
+          component={PhoneauthenForgetPassword}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ForgetPassword"
+          component={ForgetPassword}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="CustomerSignUp"
+          component={CustomerSignUp}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PhoneVerification"
+          component={PhoneVerification}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="BusinessLogin"
+          component={BusinessLogin}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="BusinessSignUp"
+          component={BusinessSignUp}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Homes"
+          component={Homes}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Servicess"
+          component={Servicess}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Likes"
+          component={Likes}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Locationss"
+          component={Locationss}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Discountss"
+          component={Discountss}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Service1"
+          component={Service1}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Service2"
+          component={Service2}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Service3"
+          component={Service3}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Service4"
+          component={Service4}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Service5"
+          component={Service5}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Service6"
+          component={Service6}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Service7"
+          component={Service7}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Service1details"
+          component={Service1details}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Service2details"
+          component={Service2details}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Service3details"
+          component={Service3details}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Service4details"
+          component={Service4details}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Service5details"
+          component={Service5details}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Service6details"
+          component={Service6details}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Service7details"
+          component={Service7details}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ViewProfile"
+          component={ViewProfile}
+          options={{ headerShown: false }}
+        />
+         
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
