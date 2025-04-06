@@ -50,7 +50,8 @@ const sendOtp = async () => {
       const credential = PhoneAuthProvider.credential(verificationId, verificationCode);
       await signInWithCredential(auth, credential);
       Alert.alert('Success', 'Phone number verified successfully!');
-      navigation.navigate('ForgetPassword'); 
+      navigation.navigate('ForgetPassword', { fullPhone });
+
     } catch (error) {
       console.error('Verification Error:', error);
       Alert.alert('Error', 'Invalid OTP. Please try again.');
@@ -72,7 +73,7 @@ const sendOtp = async () => {
         keyboardType="numeric"
         value={verificationCode}
         onChangeText={setVerificationCode}
-        maxLength={6} // Ensure it's 6 digits
+        maxLength={6} 
       />
 
       <TouchableOpacity style={styles.button} onPress={handleVerify} disabled={loading}>

@@ -11,23 +11,27 @@ import {
   ScrollView, 
   Platform 
 } from 'react-native';
+import UpdatePassword from '../../FireStore/UpdatePassword';
+import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+
 
 const { width, height } = Dimensions.get('window');
 
-function ForgotPassword({ navigation }) {
+function ForgetPassword({ route }) {
+  const { fullPhone } = route.params;
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
-
+  const navigation = useNavigation();
   const isResetEnabled =
     newPassword !== '' &&
     confirmPassword !== '' &&
     newPassword === confirmPassword &&
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(newPassword);
 
-  const handleResetPassword = () => {
+  const handleResetPassword = async () => {  // Make sure to add async here
     if (newPassword === '' || confirmPassword === '') {
       Alert.alert('Error', 'Please fill both fields.');
       return;
@@ -46,10 +50,17 @@ function ForgotPassword({ navigation }) {
       return;
     }
 
-    // Here, you would typically send the new password to your API or back-end service to update it.
-    Alert.alert('Success', 'Password reset successfully.');
-    navigation.navigate('CustomerLogin');  // Navigate to login page after successful reset
-  };
+    
+      const result = await UpdatePassword(fullPhone, newPassword);
+     if (result.success) {
+       Alert.alert('Success', result.message);
+       navigation.navigate('CustomerLogin');
+      } 
+     else {
+      Alert.alert('Error', result.message);
+    }
+    
+   };
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -205,4 +216,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ForgotPassword;
+export default ForgetPassword;
