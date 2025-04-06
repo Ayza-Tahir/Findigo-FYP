@@ -53,7 +53,7 @@ const sendOtp = async () => {
       navigation.navigate('ForgetPassword', { fullPhone });
 
     } catch (error) {
-      console.error('Verification Error:', error);
+     
       Alert.alert('Error', 'Invalid OTP. Please try again.');
     }
   };
