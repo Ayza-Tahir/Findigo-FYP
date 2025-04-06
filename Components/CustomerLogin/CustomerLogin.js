@@ -9,7 +9,8 @@ import {
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native'; // Import the hook
+import { useNavigation } from '@react-navigation/native'; 
+import LoginData from '../../FireStore/LoginData'; 
 
 const { width, height } = Dimensions.get('window');
 
@@ -25,24 +26,48 @@ export default function CustomerLogin() {
     return input.length === 10 && /^[3][0-9]{9}$/.test(input);
   };
 
-const handleLogin = () => {
-  const fullPhone = '+92' + phone;
   
-  if (!phone || !password) {
-    Alert.alert('Missing Fields', 'Please fill in all fields.');
-    return;
-  }
+  const handleLogin = async () => {
+    const fullPhone = '+92' + phone;
+    
+    if (!phone || !password) {
+      Alert.alert('Missing Fields', 'Please fill in all fields.');
+      return;
+    }
 
-  if (!isPhoneValid(phone)) {
-    Alert.alert('Invalid Number', 'Please enter a valid phone number: 3XXXXXXXXX');
-    return;
-  }
+    if (!isPhoneValid(phone)) {
+      Alert.alert('Invalid Number', 'Please enter a valid phone number: 3XXXXXXXXX');
+      return;
+    }
 
-  setError('');
-  console.log('Logging in with:', fullPhone, password);
+    setError('');
+    
+    try {
+      const result = await LoginData(fullPhone, password); 
+     if (!result.success) 
+           {
+          if (result.message === 'Phone number not found')
+            {
+            Alert.alert('Account does not exist', 'Phone number not found.')
+          } 
+           else if (result.message === 'Incorrect password')
+            {
+            Alert.alert('Password Error.','Incorrect password')
+          } 
+          else 
+          {
+            Alert.alert('Error', result.message );
+          }
+          return;
+        }
 
-navigation.navigate('Homes'); 
-};
+       Alert.alert( result.message );
+      navigation.navigate('Homes'); 
+    } catch (error) {
+      Alert.alert('Login Failed', 'There was an issue logging in. Please try again.');
+    }
+  
+  };
 
 
 const handlePasswordReset = () => {
@@ -146,6 +171,7 @@ const handlePasswordReset = () => {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
