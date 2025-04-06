@@ -11,6 +11,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native'; 
 import LoginData from '../../FireStore/LoginData'; 
+import checkPhoneExistForgotPassword from '../../FireStore/CheckPhoneExistForgotPassword';
 
 const { width, height } = Dimensions.get('window');
 
@@ -70,15 +71,27 @@ export default function CustomerLogin() {
   };
 
 
-const handlePasswordReset = () => {
+const handlePasswordReset = async () => {
   const fullPhone = '+92' + phone;
 
   if (!isPhoneValid(phone)) {
     Alert.alert('Invalid Number', 'Please enter a valid phone number: 3XXXXXXXXX');
     return;
   }
-  navigation.navigate('PhoneauthenForgetPassword', { fullPhone });
+
+  try {
+    const result = await checkPhoneExistForgotPassword(fullPhone);
+
+    if (result.success) {
+      navigation.navigate('PhoneauthenForgetPassword', { fullPhone });
+    } else {
+      Alert.alert('Phone Not Found', result.message);
+    }
+  } catch (error) {
+    Alert.alert('Error', 'Something went wrong. Please try again.');
+  }
 };
+
 
 
   return (
