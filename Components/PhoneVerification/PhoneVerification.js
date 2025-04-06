@@ -5,10 +5,12 @@ import { auth, firebaseConfig } from '../../FireBase/FireBase';
 import { signInWithCredential, PhoneAuthProvider, signInWithPhoneNumber } from 'firebase/auth';
 import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
 
+import SignUpData from '../../FireStore/SignUpData'; 
+
 const { width, height } = Dimensions.get('window');
 
-function PhoneVerification({ route }) {
-  const { phone } = route.params; 
+function PhoneVerification({ route}) {
+  const { name, phone, password } = route.params; 
   const [verificationId, setVerificationId] = useState(null);
   const [verificationCode, setVerificationCode] = useState('');
   const [loading, setLoading] = useState(false);
@@ -31,32 +33,58 @@ function PhoneVerification({ route }) {
       }
       setVerificationId(confirmation.verificationId);
       Alert.alert('OTP Sent', `A verification code has been sent to ${phone}`);
-    } catch (error) {
+    } 
+    catch (error) 
+    {
       console.error('OTP Error:', error);
       Alert.alert('Error', 'Failed to send OTP. Please try again.');
     }
     setLoading(false);
   };
 
-  const handleVerify = async () => {
-    if (!verificationId) {
-      Alert.alert('Error', 'Verification ID is missing. Please request OTP again.');
+
+const handleVerify = async () => 
+  {
+  if (!verificationId)
+     {
+    Alert.alert('Error', 'Verification ID is missing. Please request OTP again.');
+    return;
+  }
+
+  if (verificationCode.trim() === '') 
+    {
+    Alert.alert('Error', 'Please enter the verification code.');
+    return;
+  }
+
+  try {
+    const credential = PhoneAuthProvider.credential(verificationId, verificationCode);
+    await signInWithCredential(auth, credential);
+
+    
+    const result = await SignUpData(name, phone, password);
+
+    if (!result.success)
+       {
+      if (result.message === 'Phone number already exists.') 
+        {
+        Alert.alert('Account Exists', 'This phone number is already registered.');
+      } 
+      else 
+      {
+        Alert.alert('Error', result.message || 'Failed to save user data. Please try again.');
+      }
       return;
     }
-    if (verificationCode.trim() === '') {
-      Alert.alert('Error', 'Please enter the verification code.');
-      return;
-    }
-    try {
-      const credential = PhoneAuthProvider.credential(verificationId, verificationCode);
-      await signInWithCredential(auth, credential);
-      Alert.alert('Success', 'Phone number verified successfully!');
-      navigation.navigate('Homes'); 
-    } catch (error) {
-      console.error('Verification Error:', error);
-      Alert.alert('Error', 'Invalid OTP. Please try again.');
-    }
-  };
+
+    Alert.alert('Success', 'Phone number verified and account created successfully!');
+    navigation.navigate('Homes');
+
+  } catch (error) {
+    Alert.alert('Error', 'Invalid OTP. Please try again.');
+  }
+};
+
 
   return (
     <View style={styles.container}>

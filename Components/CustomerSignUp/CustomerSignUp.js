@@ -69,7 +69,9 @@ function CustomerSignUp({ navigation }) {
     }
 
    
-    navigation.navigate('PhoneVerification', { phone });
+    // navigation.navigate('PhoneVerification', { phone });
+  console.log('Sending data:', { name, phone, password });
+     navigation.navigate('PhoneVerification', { name, phone, password });
   };
 
   return (
